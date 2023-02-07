@@ -59,23 +59,20 @@ namespace APIPessoa.Controllers
             //{
             //    return BadRequest();
             //}
-
-
-            pessoas.Add(pessoa);
+            PessoaRepository repository = new();
+            repository.InserirPessoa(pessoa);
+            
             return CreatedAtAction(nameof(ConsultarPessoa), pessoa);
         }
 
+        [HttpPatch]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Pessoa>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Alterar(int index, Pessoa pessoa)
+        public IActionResult Alterar(string nome, Pessoa pessoa)
         {
             var content = Request.Headers.ContentType;
-            if (index < 0 || index > 1)
-            {
-                return BadRequest();
-            }
-
-            pessoas[index] = pessoa;
+            PessoaRepository repository = new();
+            repository.AlterarPessoa(nome, pessoa);
             return Ok(content);
         }
 
@@ -83,14 +80,10 @@ namespace APIPessoa.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public IActionResult Deletar(string nome)
-        {
-            Pessoa pessoaDeletar = pessoas.FirstOrDefault(p => p.Nome == nome);
-            if (pessoaDeletar == null)
-            {
-                return BadRequest();
-            }
+        {            
 
-            pessoas.Remove(pessoaDeletar);
+            PessoaRepository repository = new();
+            repository.DeletarPessoa(nome);
             return NoContent();
         }
     }
