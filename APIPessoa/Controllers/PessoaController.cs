@@ -44,8 +44,10 @@ namespace APIPessoa.Controllers
         [HttpGet]
         public ActionResult<Pessoa> ConsultarPessoa(string nome)
         {
-            Pessoa pessoa = pessoas.FirstOrDefault(p => p.Nome == nome);
-            return Ok(pessoa);
+            PessoaRepository repository = new();
+            List<Pessoa> PessoaBanco = repository.SelecionarPessoa(nome);
+
+            return Ok(PessoaBanco);
         }
 
         [HttpPost]
@@ -57,6 +59,8 @@ namespace APIPessoa.Controllers
             //{
             //    return BadRequest();
             //}
+
+
             pessoas.Add(pessoa);
             return CreatedAtAction(nameof(ConsultarPessoa), pessoa);
         }
